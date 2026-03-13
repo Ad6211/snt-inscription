@@ -5,7 +5,10 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>sortie cinéma</title>
     <link rel="icon" href="./icon.webp">
-</head>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet/dist/leaflet.js"></script>
+    <script src="https://unpkg.com/leaflet-routing-machine/dist/leaflet-routing-machine.js"></script>
+    </head>
 <style>
     body{
         background-color: darkblue;
@@ -35,8 +38,58 @@
                     <p><input type="checkbox" name="payement">A versé la somme de 645€ à l'ordre de monsieur Leroux (sera contabilisé comme non participant si cette case n'est pas cochée)</p>
                     <button type="submit">Soumettre</button>
                 </form>
+                <h2>Ma position GPS</h2> 
+                <div id="map"></div>
+                <script>
+                
+                if(navigator.geolocation){
+                
+                navigator.geolocation.getCurrentPosition(function(position){
+                
+                let lat = position.coords.latitude;
+                let lon = position.coords.longitude;
+                
+                // coordonnées exemple cinéma (UGC Lille)
+                let cinemaLat = 50.6369;
+                let cinemaLon = 3.0633;
+                
+                let map = L.map('map').setView([lat, lon], 13);
+                
+                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+                attribution:'© OpenStreetMap'
+                }).addTo(map);
+                
+                // position utilisateur
+                L.marker([lat,lon])
+                .addTo(map)
+                .bindPopup("Vous êtes ici")
+                .openPopup();
+                
+                // cinéma
+                L.marker([cinemaLat, cinemaLon])
+                .addTo(map)
+                .bindPopup("Cinéma UGC Lille");
+                
+                // itinéraire
+                L.Routing.control({
+                waypoints:[
+                L.latLng(lat,lon),
+                L.latLng(cinemaLat,cinemaLon)
+                ],
+                routeWhileDragging:false
+                }).addTo(map);
+                
+                });
+                
+                }else{
+                
+                alert("La géolocalisation n'est pas supportée");
+                
+                }
+                
+            </script>
           </div>
-        <img src="https://lumiere-a.akamaihd.net/v1/images/image_321aea93.jpeg?region=0,0,540,810" alt="affiche" width="400px, border:10px">
+        <img src="https://lumiere-a.akamaihd.net/v1/images/image_321aea93.jpeg?region=0,0,540,810" alt="affiche" width="400px" border="10px">
     </div>
     <a href="./cookie/index.html">
     <img src="https://static.vecteezy.com/system/resources/thumbnails/025/065/307/small_2x/cookie-with-ai-generated-free-png.png" alt="Cookie" style="position:fixed; bottom:10px; right:10px; width:80px; cursor:pointer; z-index:1000;" title="Coucou, c'est nous, les COOKIES !">
@@ -75,6 +128,7 @@
 
 </body>
 </html>
+
 
 
 
