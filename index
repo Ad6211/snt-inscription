@@ -27,6 +27,9 @@
         <p><input type="checkbox" name="payement">A versé la somme de 645€ à l'ordre de monsieur Leroux (sera contabilisé comme non participant si cette case n'est pas cochée)</p>
         <button type="submit">Soumettre</button>
     </form>
+    <a href="./cookie/index.html">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/3/3f/Chocolate_Chip_Cookie.jpg", alt="Cookie", style="position:fixed; bottom:10px; right:10px; width:80px; cursor:pointer; z-index:1000;">
+    </a>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
     emailjs.init("QS93A9o9xo0_E6UJP");
@@ -61,3 +64,4 @@
 
 </body>
 </html>
+
