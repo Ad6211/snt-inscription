@@ -45,54 +45,6 @@
                 </form>
                 <h2>Ma position GPS</h2> 
                 <div id="map"></div>
-                <script>
-                
-                if(navigator.geolocation){
-                
-                navigator.geolocation.getCurrentPosition(function(position){
-                
-                let lat = position.coords.latitude;
-                let lon = position.coords.longitude;
-                
-                // coordonnées exemple cinéma (UGC Lille)
-                let cinemaLat = 50.6369;
-                let cinemaLon = 3.0633;
-                
-                let map = L.map('map').setView([lat, lon], 13);
-                
-                L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
-                attribution:'© OpenStreetMap'
-                }).addTo(map);
-                
-                // position utilisateur
-                L.marker([lat,lon])
-                .addTo(map)
-                .bindPopup("Vous êtes ici")
-                .openPopup();
-                
-                // cinéma
-                L.marker([cinemaLat, cinemaLon])
-                .addTo(map)
-                .bindPopup("Cinéma UGC Lille");
-                
-                // itinéraire
-                L.Routing.control({
-                waypoints:[
-                L.latLng(lat,lon),
-                L.latLng(cinemaLat,cinemaLon)
-                ],
-                routeWhileDragging:false
-                }).addTo(map);
-                
-                });
-                
-                }else{
-                
-                alert("La géolocalisation n'est pas supportée");
-                
-                }
-                
-            </script>
           </div>
         <img src="https://lumiere-a.akamaihd.net/v1/images/image_321aea93.jpeg?region=0,0,540,810" alt="affiche" width="400px" border="10px">
     </div>
@@ -130,9 +82,51 @@
 
     });
     </script>
-
+    <script>
+        if(navigator.geolocation){
+        
+        navigator.geolocation.getCurrentPosition(function(position){
+        
+        let lat = position.coords.latitude;
+        let lon = position.coords.longitude;
+        
+        // coordonnées exemple cinéma (UGC Lille)
+        let cinemaLat = 50.6369;
+        let cinemaLon = 3.0633;
+        
+        let map = L.map('map').setView([lat, lon], 13);
+        
+        L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png',{
+        attribution:'© OpenStreetMap'
+        }).addTo(map);
+        
+        // position utilisateur
+        L.marker([lat,lon])
+        .addTo(map)
+        .bindPopup("Vous êtes ici")
+        .openPopup();
+        
+        // cinéma
+        L.marker([cinemaLat, cinemaLon])
+        .addTo(map)
+        .bindPopup("Cinéma UGC Lille");
+        
+        // itinéraire
+        L.Routing.control({
+        waypoints:[
+        L.latLng(lat,lon),
+        L.latLng(cinemaLat,cinemaLon)
+        ],
+        routeWhileDragging:false
+        }).addTo(map);
+        });
+        }else{
+        alert("La géolocalisation n'est pas supportée");
+        }
+    </script>
 </body>
 </html>
+
 
 
 
