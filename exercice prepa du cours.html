@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>sortie cinéma</title>
+    <link rel="icon" href="./icon.webp">
+</head>
+<style>
+    #title{
+        color: darkblue;
+        background-color: lightblue;
+        text-align: center;
+    }
+</style>
+<body>
+    <h1 id="title">Sortie cinéma</h1>
+    <p>    Dans le cadre du programme de SVT, lur la notion du développement durable, une semaine de cinéma est programmée le Dreudi 32 février, au cinéma UGC de lille centre 9h00 et 12h00.</p>
+    <a href="./synopsis.txt">
+        <p>Lien vers le synopsis</p>
+    </a>
+    <form id="cinemaForm">
+        <p>Entrez votre nom : <input type="text" name="nom" required></p>
+        <p>Entrez votre prénom : <input type="text" name="prenom" required></p>
+        <p>Entrez votre classe : <input type="text" name="classe" required></p>
+        <p>viendra à la séance : oui <input type="radio" name="ouinon" value="oui" required> non<input type="radio" name="ouinon" value="non" required></p>
+        <p><input type="checkbox" name="payement">A versé la somme de 645€ à l'ordre de monsieur Leroux (sera contabilisé comme non participant si cette case n'est pas cochée)</p>
+        <button type="submit">Soumettre</button>
+    </form>
+    <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
+    <script>
+    emailjs.init("QS93A9o9xo0_E6UJP");
+
+    document.getElementById('cinemaForm').addEventListener('submit', function(e){
+
+        e.preventDefault();
+
+        const form = this;
+
+        // Ajoute valeur paiement forcée
+        const paiementValue = form.payement && form.payement.checked ? "Oui" : "Non";
+
+        emailjs.send('service_ccah65g', 'template_mi6hr6q', {
+            nom: form.nom.value,
+            prenom: form.prenom.value,
+            classe: form.classe.value,
+            ouinon: form.ouinon.value,
+            payement: paiementValue
+        })
+        .then(function(){
+            alert('Formulaire envoyé !');
+            window.location.href = 'confirmation.html';
+        })
+        .catch(function(error){
+            alert('Erreur : ' + JSON.stringify(error));
+            window.location.href = 'error.html';
+        });
+
+    });
+    </script>
+
+</body>
+</html>
