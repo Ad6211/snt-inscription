@@ -19,10 +19,10 @@
                   <p>Lien vers le synopsis</p>
                 </a>    
           </div>
-        <img src="./affiche.jpg" alt="affiche" width="400px" border="10px">
+        <img src="./affiche.jpg" alt="affiche" width="400px",border="10px">
     </div>
     <div style="background-color: white; color: black; padding: 20px;">
-        <hr
+        <hr>
         <form id="cinemaForm">
             <p>Entrez votre nom : <input type="text" name="nom" required></p>
             <p>Entrez votre prénom : <input type="text" name="prenom" required></p>
@@ -41,35 +41,47 @@
     </a>
     <script src="https://cdn.jsdelivr.net/npm/emailjs-com@3/dist/email.min.js"></script>
     <script>
-    emailjs.init("QS93A9o9xo0_E6UJP");
+emailjs.init("QS93A9o9xo0_E6UJP");
 
-    document.getElementById('cinemaForm').addEventListener('submit', function(e){
+document.getElementById('cinemaForm').addEventListener('submit', function(e){
+    e.preventDefault();
 
-        e.preventDefault();
+    const form = this;
 
-        const form = this;
+    const data = {
+        nom: form.nom.value,
+        prenom: form.prenom.value,
+        classe: form.classe.value,
+        ouinon: form.ouinon.value,
+        payement: form.payement.checked ? "Oui" : "Non"
+    };
 
-        // Ajoute valeur paiement forcée
-        const paiementValue = form.payement && form.payement.checked ? "Oui" : "Non";
+    // 1️⃣ Envoi email
+    const emailPromise = emailjs.send('service_ccah65g', 'template_mi6hr6q', data);
 
-        emailjs.send('service_ccah65g', 'template_mi6hr6q', {
-            nom: form.nom.value,
-            prenom: form.prenom.value,
-            classe: form.classe.value,
-            ouinon: form.ouinon.value,
-            payement: paiementValue
-        })
-        .then(function(){
-            alert('Formulaire envoyé !');
-            window.location.href = 'confirmation.html';
-        })
-        .catch(function(error){
-            alert('Erreur : ' + JSON.stringify(error));
-            window.location.href = 'error.html';
-        });
+    // 2️⃣ Envoi vers Google Sheets
+    const sheetPromise = fetch("https://script.google.com/macros/s/AKfycbyd7LXBaQYQ074n-rdfMbesrBw0qP6hXZJemxUFL0uPIZBntFES7xHaICpFhW8KDDJygg/exec", {
+    method: "POST",
+    headers: {
+        "Content-Type": "application/json"
+    },
+    body: JSON.stringify(data)
+    })
+    .then(res => res.text()); // 👈 important
 
+    // 3️⃣ Attendre les deux
+    Promise.all([emailPromise, sheetPromise])
+    .then(() => {
+        alert("Inscription envoyée + enregistrée !");
+        window.location.href = "confirmation.html";
+    })
+    .catch((error) => {
+        console.error(error);
+        alert("Erreur lors de l'envoi");
+        window.location.href = "error.html";
     });
-    </script>
+});
+</script>
     <script>
         if(navigator.geolocation){
         
